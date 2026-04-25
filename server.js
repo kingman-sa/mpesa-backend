@@ -7,11 +7,11 @@ app.use(express.json());
 
 app.post("/pay", async (req, res) => {
     try {
-        const { amount, phone } = req.body;
+        const { amount, phone, reference } = req.body;
 
-        if (!amount || !phone) {
+        if (!amount || !phone || !reference) {
             return res.status(400).json({
-                error: "amount e phone são obrigatórios"
+                error: "amount, phone e reference são obrigatórios"
             });
         }
 
@@ -27,7 +27,7 @@ app.post("/pay", async (req, res) => {
                 amount: amount,
                 to: process.env.TO,
                 from: phone,
-                reference: process.env.REFERENCE,
+                reference: reference, // 🔥 agora vem do cliente
                 transaction: Date.now().toString(),
                 subject: "Bewise"
             }
@@ -35,6 +35,16 @@ app.post("/pay", async (req, res) => {
 
         res.json(response.data);
 
+    } catch (err) {
+        res.status(500).json({
+            error: err.response?.data || err.message
+        });
+    }
+});
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Rodando na porta " + (process.env.PORT || 3000));
+});
     } catch (err) {
         res.status(500).json({
             error: err.response?.data || err.message
