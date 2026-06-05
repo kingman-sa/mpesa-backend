@@ -20,7 +20,7 @@ app.post("/pay", async (req, res) => {
 
         const response = await axios({
             method: "post",
-            url: "https://weeyapi.onrender.com/api/v1/payment/mpesa",
+            url: "https://boldpay-stfp.onrender.com/api/v1/payment/c2b",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
